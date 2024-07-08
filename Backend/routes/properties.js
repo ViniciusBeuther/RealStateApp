@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const Property = require('../models/Property');
+const { default: PropertyServices } = require('../services/PropertyServices');
+const { default: AddressServices } = require('../services/AddressServices');
 
 // get property list
 router.get('/', (req, res) => 
@@ -31,7 +33,7 @@ router.get('/:id', (req, res) =>
 )
 
 // insert a row in database
-router.get('/add', (req, res) => {
+router.post('/add', async (req, res) => {
     const data = {
      id: "ZSD121ASDA23Q",
      number_rooms: 3,
@@ -45,7 +47,7 @@ router.get('/add', (req, res) => {
      wasSold: false,
      contact: "imoboliariaY@gmail.com",
     }
-
+    const propertyServices = new PropertyServices(config.postgres.client)
     let { 
         id,
         number_rooms, 
@@ -60,7 +62,7 @@ router.get('/add', (req, res) => {
         contact
     } = data;
 
-    Property.create({
+    const property = await propertyServices.createProperty({
         id,
         number_rooms,
         number_bathrooms,
@@ -72,6 +74,18 @@ router.get('/add', (req, res) => {
         price,
         wasSold,
         contact
+    })
+
+    const addressServices = new AddressServices(config.postgres.services);
+
+    addressServices.createAddress({
+        property_id: property.id,
+        country: 'Brasil',
+        state:'Santa Catarina',
+        city: 'Sao Bento do Sul',
+        neighborhood: 'Cruzeiro',
+        street: 'Qualquer rua',
+        number: '100',
     })
     .then(property => res.redirect('/properties'))
     .catch(err => console.log(err));
