@@ -1,0 +1,23 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore arquivos de build gerados
+build/
+dist/
+
+# Ignore arquivos de log
+*.log
+
+# Ignore arquivos de ambiente local
+.env
+
+# Ignore yarn.lock (se estiver usando Yarn)
+yarn.lock
+
+# Ignore package-lock.json (se estiver usando npm)
+package-lock.json
+
+# Ignore qualquer arquivo ou diretório específico que você queira excluir
+# exemplo:
+# /temp/
+# .DS_Store (para usuários macOS)
