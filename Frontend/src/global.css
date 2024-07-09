@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html{
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-size: 16pt;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: 0.75fr repeat(4, 1fr);
+  grid-template-rows: 0.25fr repeat(4, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 100vh;
+  }
+  
+  .header { grid-area: 1 / 1 / 2 / 6; }
+  .navbar { grid-area: 2 / 1 / 6 / 2; }
+  .main { grid-area: 2 / 2 / 6 / 6; }
+
+@layer base {
+    
+:root  {
+  --background: 181 100% 95%;
+  --foreground: 181 5% 5%;
+  --card: 181 50% 90%;
+  --card-foreground: 181 5% 10%;
+  --popover: 181 100% 95%;
+  --popover-foreground: 181 100% 5%;
+  --primary: 181 100% 61%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 181 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 143 30% 85%;
+  --muted-foreground: 181 5% 35%;
+  --accent: 143 30% 80%;
+  --accent-foreground: 181 5% 10%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 181 5% 90%;
+  --border: 181 30% 50%;
+  --input: 181 30% 18%;
+  --ring: 181 100% 61%;
+  --radius: 0.5rem;
+}
+.dark  {
+  --background: 181 50% 5%;
+  --foreground: 181 5% 90%;
+  --card: 181 50% 5%;
+  --card-foreground: 181 5% 90%;
+  --popover: 181 50% 5%;
+  --popover-foreground: 181 5% 90%;
+  --primary: 181 100% 61%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 181 30% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 143 30% 15%;
+  --muted-foreground: 181 5% 60%;
+  --accent: 143 30% 15%;
+  --accent-foreground: 181 5% 90%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 181 5% 90%;
+  --border: 181 30% 18%;
+  --input: 181 30% 18%;
+  --ring: 181 100% 61%;
+  --radius: 0.5rem;
+}
+ }
