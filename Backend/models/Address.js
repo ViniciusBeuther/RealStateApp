@@ -1,20 +1,22 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const db = require('../config/database');
 const Property = require('./Property');
 
 const Address = db.define('address', {
     id: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.UUIDV4
     },
     property_id: {
-        type: Sequelize.STRING,
-        references:{
+        type: Sequelize.UUID,
+        references: {
             model: Property,
             key: 'id'
-        }
+        },
+        field: 'property_id' 
     },
-    country:{
+    country: {
         type: Sequelize.STRING,
     },
     state: {
@@ -31,13 +33,17 @@ const Address = db.define('address', {
     },
     number: {
         type: Sequelize.INTEGER,
-    },
+    }
 });
 
-Property.hasOne(Address, { 
-    foreignKey: 'property_id' ,
-    allowNull: false
+Property.hasOne(Address, {
+    foreignKey: 'property_id',
+    allowNull: false,
+    onDelete: "CASCADE"
 });
-Address.belongsTo(Property);
+Address.belongsTo(Property, {
+    foreignKey: 'property_id',
+    onDelete: "CASCADE"
+});
 
 module.exports = Address;

@@ -1,25 +1,22 @@
-const express = require("express");
-const exphbs = require("express-handlebars");
-const path = require("path");
+const express = require('express');
+const exphbs = require('express-handlebars');
+const path = require('path');
+const db = require('./config/database');
 
-// Database
-const db = require("./config/database");
-
-// test DB
+// Test DB
 db.authenticate()
-.then(() => console.log("Database connected"))
-.catch(err => console.log("Error: " + err))
+  .then(() => console.log('Database connected'))
+  .catch(err => console.log('Error: ' + err));
 
 const app = express();
 
-app.get('/', (req, res) => res.send("INDEX"));
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// Property routes
+// Routes
 app.use('/properties', require('./routes/properties'));
-
-// Address routes
-app.use('/addresses', require('./routes/addresses'))
+app.use('/addresses', require('./routes/addresses'));
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, console.log(`Server started on port: ${PORT}`));
+app.listen(PORT, console.log(`Server started on port ${PORT}`));

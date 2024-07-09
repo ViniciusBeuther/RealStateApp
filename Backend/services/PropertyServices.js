@@ -1,32 +1,17 @@
-const Models = require('../models/Property');
+const Models = require('../models');
 
 class PropertyServices{
 
     constructor( sequelize ){
         Models(sequelize);
-        this.property = sequelize;
+        this.client = sequelize;
         this.models = sequelize.models;
     }
 
-    async createProperty( { id, number_rooms, number_bathrooms, all_rooms, square_meters, description, type, image_url, price, wasSold, contact } ){
+    async createProperty( data ){
         try{
-            const property = await this.models.property.create(
-                {
-                    id,
-                    number_rooms, 
-                    number_bathrooms,
-                    all_rooms,
-                    square_meters,
-                    description,
-                    type,
-                    image_url,
-                    price,
-                    wasSold,
-                    contact
-                }
-            )
-
-            return property;
+           const property = await this.models.property.create(data);
+           return property;
         } 
         catch(err){
             return err;

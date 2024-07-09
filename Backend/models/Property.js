@@ -1,10 +1,11 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const db = require('../config/database');
 
 const Property = db.define('property', {
     id: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.UUIDV4
     },
     number_rooms: {
         type: Sequelize.INTEGER
@@ -13,7 +14,7 @@ const Property = db.define('property', {
         type: Sequelize.INTEGER
     },
     all_rooms: {
-        type: Sequelize.ARRAY(Sequelize.DataTypes.STRING)
+        type: Sequelize.ARRAY(Sequelize.STRING)
     },
     square_meters: {
         type: Sequelize.FLOAT
@@ -41,7 +42,7 @@ const Property = db.define('property', {
     },
     updatedAt: {
         type: Sequelize.DATE
-    },
+    }
 });
 
 module.exports = Property;
