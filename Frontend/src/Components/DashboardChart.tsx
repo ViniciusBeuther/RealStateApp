@@ -31,7 +31,7 @@ const DashboardChart: React.FC = () => {
               label: 'Aquisições por ano',
               data: data.map(row => row.count),
               borderColor: '#00675E',
-              backgroundColor: '#00342f',
+              backgroundColor: '#00B4A4',
               borderRadius: 10
             },
           ],
@@ -47,7 +47,7 @@ const DashboardChart: React.FC = () => {
     };
   }, []);
 
-  return <canvas className='bg-primary-100 rounded-lg shadow-lg' id="dashboardChartCanvas"></canvas>;
+  return <canvas className='bg-customWhite-100 rounded-lg shadow-lg' id="dashboardChartCanvas"></canvas>;
 };
 
 export default DashboardChart;
