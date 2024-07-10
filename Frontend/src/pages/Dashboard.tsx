@@ -1,3 +1,5 @@
+import DashboardChart from "../Components/DashboardChart";
+import DashboardTable from "../Components/DashboardTable";
 
 const Dashboard:React.FC = () => {
     return(
@@ -19,8 +21,13 @@ const Dashboard:React.FC = () => {
                     <h1>12</h1>
                     <p>Clientes</p>
                 </div>
-                <div className="DashboardChildren05 DashboardTableParent">5</div>
-                <div className="DashboardChildren06 DashboardChartParent">6</div>
+                <div className="DashboardChildren05 DashboardTableParent">
+                    <DashboardTable />
+                </div>
+                <div className="DashboardChildren06 DashboardChartParent flex items-center flex-col justify-start gap-2 shadow-lg text-white">
+                    <h1>Imóveis Vendidos durante o Ano</h1>
+                    <DashboardChart />
+                </div>
             </article>
         </section>
     )

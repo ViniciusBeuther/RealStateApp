@@ -60,12 +60,17 @@ body, html{
       font-weight: 300;
     }
   }
-  .DashboardTableParent{
-    background-color: greenyellow;
+  .DashboardTableParent, .DashboardChartParent{
+    background-color: #00675E;
+    border-radius: .75rem;
+    padding: 1.5rem;
+
+    h1{
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
   }
-  .DashboardChartParent{
-    background-color: tomato;
-  }
+  
   }
 
 
