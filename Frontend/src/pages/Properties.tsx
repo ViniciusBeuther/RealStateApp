@@ -1,9 +1,27 @@
+import { useEffect, useState } from "react"
+import SpinnerComponent from "../Components/Spinner";
+
 interface HeaderList{
     key: number, 
     value: string
 }
 
+interface Data{
+    id: string,
+    number_rooms: number,
+    number_bathrooms: number,
+    all_rooms: string[],
+    square_meters: number,
+    description: string,
+    type: string,
+    image_url: string,
+    price: number,
+    wasSold: boolean,
+    contact: string,
+}
+
 const Properties:React.FC = () => {
+    const API_URL:string = 'http://localhost:5000/properties';
     const tableHeader:HeaderList[] = [
         {
             key:1,
@@ -30,6 +48,24 @@ const Properties:React.FC = () => {
             value: 'Vendida'
         },
     ]
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {    
+        fetch( API_URL )
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setData(data);
+            setIsLoading(true);
+        })
+        .catch(err => console.log(err))
+        
+    }, [])
+
+    if(!isLoading){
+        return <SpinnerComponent />
+    }
 
     return(
         <section className="w-full h-full PropertiesBackgroundPattern flex items-start justify-center">
@@ -43,6 +79,16 @@ const Properties:React.FC = () => {
                         )) }
                     </tr>
                 </thead>
+                <tbody>
+                    { data.map((row:Data, idx: number) => (
+                        <tr key={idx}>
+                            <td>{row.id}</td>
+                            <td>{}</td>
+                            <td>{row.contact}</td>
+                            <td>{row.price}</td>
+                        </tr>
+                    )) }
+                </tbody>
             </table>
         </section>
     )
