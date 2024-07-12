@@ -18,15 +18,23 @@ interface Data{
     price: number,
     wasSold: boolean,
     contact: string,
+    address: Address
+}
+
+interface Address{
+    id: string,
+    property_id: string,
+    country: string,
+    state: string,
+    city: string,
+    neighborhood: string,
+    street: string,
+    number: number,
 }
 
 const Properties:React.FC = () => {
     const API_URL:string = 'http://localhost:5000/properties';
     const tableHeader:HeaderList[] = [
-        {
-            key:1,
-            value: 'ID'
-        },
         {
             key:2,
             value: 'Localização'
@@ -48,14 +56,14 @@ const Properties:React.FC = () => {
             value: 'Vendida'
         },
     ]
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {    
         fetch( API_URL )
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            //console.log(data)
             setData(data);
             setIsLoading(true);
         })
@@ -82,10 +90,11 @@ const Properties:React.FC = () => {
                 <tbody>
                     { data.map((row:Data, idx: number) => (
                         <tr key={idx}>
-                            <td>{row.id}</td>
-                            <td>{}</td>
-                            <td>{row.contact}</td>
-                            <td>{row.price}</td>
+                            <td className="text-center">{row.address == null ? 'N/A' : row.address.city}</td>
+                            <td className="text-center">{row.type}</td>
+                            <td className="text-center">{row.square_meters} m2</td>
+                            <td className="text-center">$ {row.price.toLocaleString()}</td>
+                            <td className="text-center">{row.wasSold ? 'Vendida' : 'Disponível'}</td>
                         </tr>
                     )) }
                 </tbody>

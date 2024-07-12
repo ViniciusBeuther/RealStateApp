@@ -6,7 +6,12 @@ const Address = require('../models/Address');
 // get all properties
 router.get('/', async (req, res) => {
   try {
-    const properties = await Property.findAll();
+    const properties = await Property.findAll({
+      include: [{
+        model: Address,
+        as: 'address' 
+      }]
+    });
     res.status(200).json(properties);
   } catch (err) {
     console.log(err);
