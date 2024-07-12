@@ -33,10 +33,15 @@ module.exports = {
               900: '#001f1c',
             },
             'customGray': {
+              50: '#d8d8d8',
               100: '#808080'
             },
             'customWhite':{
               100: '#f9f9f9'
+            },
+            tableGray:{
+              100: '#ebebeb',
+              200: '#dfdfdf'
             }
            },
   },

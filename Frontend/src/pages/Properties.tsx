@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import SpinnerComponent from "../Components/Spinner";
+import { Chip } from "@nextui-org/react";
+import PropertiesTable from "../Components/PropertiesTable";
 
 interface HeaderList{
     key: number, 
@@ -36,8 +38,12 @@ const Properties:React.FC = () => {
     const API_URL:string = 'http://localhost:5000/properties';
     const tableHeader:HeaderList[] = [
         {
+            key:1,
+            value: 'Bairro'
+        },
+        {
             key:2,
-            value: 'Localização'
+            value: 'Cidade'
         },
         {
             key:3,
@@ -53,11 +59,12 @@ const Properties:React.FC = () => {
         },
         {
             key:6,
-            value: 'Vendida'
+            value: 'Status'
         },
     ]
     const [data, setData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isShowingDetails, setIsShowingDetails] = useState(false);
 
     useEffect(() => {    
         fetch( API_URL )
@@ -76,29 +83,8 @@ const Properties:React.FC = () => {
     }
 
     return(
-        <section className="w-full h-full PropertiesBackgroundPattern flex items-start justify-center">
-            <table className="w-[90%] table-auto border-collapse"> 
-                <thead>
-                    <tr className="bg-red-500">
-                        { tableHeader.map((row) => (
-                            <th key={row.key}>
-                                {row.value}
-                            </th>
-                        )) }
-                    </tr>
-                </thead>
-                <tbody>
-                    { data.map((row:Data, idx: number) => (
-                        <tr key={idx}>
-                            <td className="text-center">{row.address == null ? 'N/A' : row.address.city}</td>
-                            <td className="text-center">{row.type}</td>
-                            <td className="text-center">{row.square_meters} m2</td>
-                            <td className="text-center">$ {row.price.toLocaleString()}</td>
-                            <td className="text-center">{row.wasSold ? 'Vendida' : 'Disponível'}</td>
-                        </tr>
-                    )) }
-                </tbody>
-            </table>
+        <section className="w-full h-full PropertiesBackgroundPattern flex items-start justify-center pt-5">
+            { isShowingDetails ? 'Details' : <PropertiesTable data={data} tableHeader={tableHeader} /> }
         </section>
     )
 }
