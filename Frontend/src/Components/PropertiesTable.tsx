@@ -29,6 +29,15 @@ interface Address{
 const PropertiesTable = ( props:any ) => {
     const tableHeader = props.tableHeader;
     const data = props.data;
+    const setShowDetails = props.setIsShowingDetails;
+    const setPropertyDetailsID = props.setPropertyDetailsID;
+
+    const handleClick = ( id:string ) => {
+        alert('Clicked');
+        setShowDetails(true);
+        setPropertyDetailsID(id);
+    }
+
     return(
         <table className="w-[90%] table-auto border-collapse shadow-lg"> 
                 <thead>
@@ -44,7 +53,7 @@ const PropertiesTable = ( props:any ) => {
                     { data.map((row:Data, idx: number) => (
                         <tr key={idx} 
                             className={`${ idx % 2 == 0 ? 'bg-tableGray-100' : 'bg-tableGray-200' } border-b-white border-b-[2px] hover:cursor-pointer hover:bg-primary-100 hover:border-b-primary-300`}
-                            onClick={() => alert('clicked')}
+                            onClick={() => handleClick( row.id )}
                         >
                             <td className="text-center py-2">{row.address == null ? 'N/A' : row.address.neighborhood}</td>
                             <td className="text-center py-2">{row.address == null ? 'N/A' : row.address.city}</td>

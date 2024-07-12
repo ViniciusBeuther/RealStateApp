@@ -65,6 +65,7 @@ const Properties:React.FC = () => {
     const [data, setData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowingDetails, setIsShowingDetails] = useState(false);
+    const [propertyDetailsID, setPropertyDetailsID] = useState('');
 
     useEffect(() => {    
         fetch( API_URL )
@@ -84,7 +85,10 @@ const Properties:React.FC = () => {
 
     return(
         <section className="w-full h-full PropertiesBackgroundPattern flex items-start justify-center pt-5">
-            { isShowingDetails ? 'Details' : <PropertiesTable data={data} tableHeader={tableHeader} /> }
+            { isShowingDetails ? (
+                <div><button>voltar</button></div>
+                
+            ) : <PropertiesTable data={data} tableHeader={tableHeader} setIsShowingDetails={setIsShowingDetails} setPropertyDetailsID={setPropertyDetailsID} /> }
         </section>
     )
 }
