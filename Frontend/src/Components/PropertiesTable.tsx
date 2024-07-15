@@ -33,7 +33,6 @@ const PropertiesTable = ( props:any ) => {
     const setPropertyDetailsID = props.setPropertyDetailsID;
 
     const handleClick = ( id:string ) => {
-        alert('Clicked');
         setShowDetails(true);
         setPropertyDetailsID(id);
     }

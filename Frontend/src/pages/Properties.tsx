@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import SpinnerComponent from "../Components/Spinner";
 import { Chip } from "@nextui-org/react";
 import PropertiesTable from "../Components/PropertiesTable";
+import Details from "../Components/Details";
 
 interface HeaderList{
     key: number, 
@@ -86,7 +87,9 @@ const Properties:React.FC = () => {
     return(
         <section className="w-full h-full PropertiesBackgroundPattern flex items-start justify-center pt-5">
             { isShowingDetails ? (
-                <div><button>voltar</button></div>
+                <div className="w-full">
+                    <Details setIsShowingDetailsProp={setIsShowingDetails} propertyDetailsID={propertyDetailsID} />
+                </div>
                 
             ) : <PropertiesTable data={data} tableHeader={tableHeader} setIsShowingDetails={setIsShowingDetails} setPropertyDetailsID={setPropertyDetailsID} /> }
         </section>
