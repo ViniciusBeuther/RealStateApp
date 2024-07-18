@@ -1,6 +1,4 @@
 const express = require('express');
-const exphbs = require('express-handlebars');
-const path = require('path');
 const db = require('./config/database');
 const cors = require('cors');
 
@@ -15,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
+
 
 // Routes
 app.use('/properties', require('./routes/properties'));

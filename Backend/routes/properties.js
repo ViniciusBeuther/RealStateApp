@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Property = require('../models/Property');
 const Address = require('../models/Address');
+const upload = require('../config/uploadConfig');
 
 // get all properties
 router.get('/', async (req, res) => {
@@ -84,5 +85,34 @@ router.put('/update/:id', async (req, res) => {
         return res.status(500).send('Server error')
     }
 })
+
+// Image upload route
+router.post('/upload', (req, res) => {
+  upload(req, res, async (err) => {
+    console.log('body no router: ', req.body);
+    if (err) {
+      return res.status(400).json({ error: err });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file selected' });
+    }
+
+    const imgUrl = `uploads/${req.body.propertyId}/${req.file.filename}`;
+    const { propertyId } = req.body;
+    
+    try {
+      const property = await Property.findByPk(propertyId);
+      if (!property) {
+        return res.status(404).json({ error: 'Property not found' });
+      }
+
+      res.status(200).json({ message: 'File uploaded', imgUrl: imgUrl });
+    } catch (dbError) {
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+});
+
 
 module.exports = router;

@@ -24,11 +24,16 @@ const ImageUpload: React.FC = () => {
 
     const formData = new FormData();
     formData.append('image', image);
+    formData.append('propertyId', propertyId); // Enviar o ID da propriedade
+    
 
     try {
-      const response = await fetch(`http://localhost:5000/properties/upload/${propertyId}`, {
+      const response = await fetch('http://localhost:5000/properties/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            'property-id': propertyId,
+          },
       });
 
       if (!response.ok) {
@@ -36,7 +41,8 @@ const ImageUpload: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log('Imagem enviada:', data.imagePath);
+      console.log('Imagem enviada:', data.imgUrl);
+      console.log('Imagem enviada front:', data);
       setUploadedImagePath(data.imagePath);
 
       // Limpar campos após o upload
