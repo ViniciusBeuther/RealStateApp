@@ -3,6 +3,8 @@ const router = express.Router();
 const Property = require('../models/Property');
 const Address = require('../models/Address');
 const upload = require('../config/uploadConfig');
+const fs = require('fs.extra')
+const path = require('path');
 
 // get all properties
 router.get('/', async (req, res) => {
@@ -87,9 +89,14 @@ router.put('/update/:id', async (req, res) => {
 })
 
 // Image upload route
-router.post('/upload', (req, res) => {
+router.post('/upload/:propertyId', (req, res) => {
+  const { propertyId } = req.params;
+  console.log('router id: ', propertyId);
+  
+
   upload(req, res, async (err) => {
-    console.log('body no router: ', req.body);
+    // console.log('body no router: ', req.body);
+    
     if (err) {
       return res.status(400).json({ error: err });
     }
@@ -97,9 +104,23 @@ router.post('/upload', (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No file selected' });
     }
+    var filename = req.file.filename;
+    const tempDir = 'C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + req.file.fieldname + '-' + path.extname(req.file.originalname);
 
-    const imgUrl = `uploads/${req.body.propertyId}/${req.file.filename}`;
-    const { propertyId } = req.body;
+    fs.mkdirpSync('C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + propertyId)
+
+    const folderToInsert = 'C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + propertyId + '\\' + req.file.fieldname + '-' + path.extname(req.file.originalname)
+
+    console.log('temp directory: ', tempDir);
+
+
+    fs.move(tempDir, folderToInsert, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+
+        res.json({});
+    });
     
     try {
       const property = await Property.findByPk(propertyId);

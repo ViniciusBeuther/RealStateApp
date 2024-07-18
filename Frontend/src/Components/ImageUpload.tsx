@@ -23,12 +23,15 @@ const ImageUpload: React.FC = () => {
     }
 
     const formData = new FormData();
+    
+    console.log('image props: ' + image);
+    
     formData.append('image', image);
-    formData.append('propertyId', propertyId); // Enviar o ID da propriedade
+    formData.append('propertyId', propertyId);
     
 
     try {
-      const response = await fetch('http://localhost:5000/properties/upload', {
+      const response = await fetch('http://localhost:5000/properties/upload/' + propertyId, {
         method: 'POST',
         body: formData,
         headers: {

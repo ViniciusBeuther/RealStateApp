@@ -8,17 +8,14 @@ const path = require('path');
 // Set storage engine
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log('body no storage: ', req.headers.connection);
-    
-    const propertyId = req.body.propertyId;
 
-    const path = './uploads/' + propertyId;
+    const path = './uploads/tempDir';
     fs.mkdirSync(path, { recursive: true })
 
     return cb(null, path)
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, file.fieldname + '-' + path.extname(file.originalname));
   },
 });
 
