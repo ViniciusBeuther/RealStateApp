@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import SpinnerComponent from "../Components/Spinner";
-import { Chip } from "@nextui-org/react";
 import PropertiesTable from "../Components/PropertiesTable";
 import Details from "../Components/Details";
 

@@ -104,35 +104,8 @@ router.post('/upload/:propertyId', (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No file selected' });
     }
-    var filename = req.file.filename;
-    const tempDir = 'C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + req.file.fieldname + '-' + path.extname(req.file.originalname);
-
-    fs.mkdirpSync('C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + propertyId)
-
-    const folderToInsert = 'C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\tempDir\\' + propertyId + '\\' + req.file.fieldname + '-' + path.extname(req.file.originalname)
-
-    console.log('temp directory: ', tempDir);
-
-
-    fs.move(tempDir, folderToInsert, function (err) {
-        if (err) {
-            return console.error(err);
-        }
-
-        res.json({});
-    });
-    
-    try {
-      const property = await Property.findByPk(propertyId);
-      if (!property) {
-        return res.status(404).json({ error: 'Property not found' });
-      }
-
-      res.status(200).json({ message: 'File uploaded', imgUrl: imgUrl });
-    } catch (dbError) {
-      res.status(500).json({ error: 'Database error' });
-    }
   });
+  
 });
 
 

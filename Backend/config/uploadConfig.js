@@ -7,15 +7,17 @@ const path = require('path');
 
 // Set storage engine
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: async (req, file, cb) => {
 
-    const path = './uploads/tempDir';
-    fs.mkdirSync(path, { recursive: true })
-
+      const splitPath = req.originalUrl.split('/');
+      const propertyId = splitPath[3];
+      
+      const path = './uploads/tempDir/' + propertyId;
+      fs.mkdirSync(path, { recursive: true })
     return cb(null, path)
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + path.extname(file.originalname));
+    cb(null, 'image' + '-' + Date.now() + path.extname(file.originalname));
   },
 });
 
