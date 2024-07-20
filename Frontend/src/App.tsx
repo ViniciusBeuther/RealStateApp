@@ -5,7 +5,8 @@ import propertyIcon from '../public/icons/property-icon.svg'
 import soldIcon from '../public/icons/sold-icon.svg'
 import logo from '../public/icons/logo.svg'
 import Properties from "./pages/Properties";
-import Sold from "./pages/Sold";
+import Sold from "./pages/AddNewProperty";
+import AddNewProperty from "./pages/AddNewProperty";
 
 
 const App: React.FC = () => {
@@ -55,7 +56,7 @@ const App: React.FC = () => {
 
 {/* Choose selected component */}
       <main className="main w-full h-full pr-2 py-2">
-        { selected == 'Dashboard' ? <Dashboard /> : selected == 'Imóveis' ? <Properties /> : selected == 'Vendidos' ? <Sold /> : '' }
+        { selected == 'Dashboard' ? <Dashboard /> : selected == 'Imóveis' ? <Properties /> : selected == 'Vendidos' ? <AddNewProperty /> : '' }
       </main>
     </div>
   );
