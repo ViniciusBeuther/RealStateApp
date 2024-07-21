@@ -3,7 +3,7 @@ import React, { ChangeEvent } from "react";
 interface Props{
     label: string,
     type: string,
-    value: string|number|string[]|undefined,
+    value: string|number|undefined,
     handleChange: (ev: ChangeEvent<HTMLInputElement>) => void,
     placeholder?: string,
 }

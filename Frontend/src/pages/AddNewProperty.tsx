@@ -14,7 +14,7 @@ interface InputParams{
 const AddNewProperty:React.FC = () => {
     const [numberOfRooms, setNumberOfRooms] = useState<string>('');
     const [numberOfBathrooms, setNumberOfBathrooms] = useState<string>('');
-    const [allRooms, setAllRooms] = useState<string[]>(['']);
+    const [allRooms, setAllRooms] = useState<string>('');
     const [squareMeters, setSquareMeters] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [type, setType] = useState<string>('');
@@ -39,6 +39,14 @@ const AddNewProperty:React.FC = () => {
                 label: 'Número de Banheiros',
                 type: 'text',
                 value: numberOfBathrooms,
+                placeholder: ''
+            },
+            {
+                id: 'Comodos',
+                handleChange: (ev:any) => setAllRooms(ev.target.value),
+                label: 'Comodos do Imóvel (separado por vírgulas): ',
+                type: 'text',
+                value: allRooms,
                 placeholder: ''
             },
             {
@@ -97,7 +105,7 @@ const AddNewProperty:React.FC = () => {
                     />
                 )) }
                 <div className="flex items-start justify-center">
-                    
+
                 </div>
                 <button>
                     Adicionar
