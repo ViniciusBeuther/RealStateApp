@@ -12,7 +12,7 @@ interface Data{
     id: string,
     number_rooms: number,
     number_bathrooms: number,
-    all_rooms: string[],
+    all_rooms: string,
     square_meters: number,
     description: string,
     type: string,
