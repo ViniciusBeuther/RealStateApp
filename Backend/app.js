@@ -19,5 +19,5 @@ app.use(cors())
 app.use('/properties', require('./routes/properties'));
 app.use('/addresses', require('./routes/addresses'));
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000 || process.env.PORT;
 app.listen(PORT, console.log(`Server started on port ${PORT}`));

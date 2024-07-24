@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import FormInput from "../Components/FormInput";
-import ImageUpload from "../Components/ImageUpload";
 import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
@@ -116,17 +115,17 @@ const AddNewProperty: React.FC = () => {
       placeholder: "",
     },
   ];
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<FileList | null>(null);
   const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
   const [error, setError] = useState<string>("");
   const rootImageFolder =
     "C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads";
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
-    }
-  };
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+          setImage(e.target.files);
+        }
+      };
 
   const clearInputFields = () => {
     setNumberOfBathrooms("");
@@ -166,13 +165,15 @@ const AddNewProperty: React.FC = () => {
     const propertyId = uuidv4();
     const formData = new FormData();
 
-    formData.append("image", image);
+    Array.from(image).forEach((image) => {
+        formData.append('images', image);
+    })
+
     formData.append("propertyId", propertyId);
     console.log('adicionou no formdata')
 
     async function uploadImg(){
         try {
-            console.log(`http://localhost:8000/properties/upload/${propertyId}`);
             console.log(image);
             console.log(propertyId);
 
@@ -182,8 +183,10 @@ const AddNewProperty: React.FC = () => {
               method: "POST",
               body: formData,
             }
-          )
-          console.log(`passou`)
+          ).then((results) => {
+            console.log(results.status)
+          })
+          
           
          // const filesInsideOfImgFolder = fs.readdirSync(imagesDirectory);
         } catch (error) {
@@ -199,7 +202,7 @@ const AddNewProperty: React.FC = () => {
       <article className="w-full h-full bg-green-200">
         <h1 className="text-2xl font-bold">Preencha os Dados da Propriedade</h1>
 
-        <form onSubmit={handleUpload}>
+        <form onSubmit={handleUpload} name="images">
           {formInput.map((element, idx) => (
             <FormInput
               handleChange={element.handleChange}
@@ -214,7 +217,7 @@ const AddNewProperty: React.FC = () => {
           <div>
             <h2>Upload de Imagem</h2>
             <div>
-              <input type="file" onChange={handleFileChange} />
+              <input type="file" onChange={handleFileChange} multiple />
             </div>
             <div>
               <button onClick={handleUpload}>Enviar Imagem</button>

@@ -3,7 +3,7 @@ const router = express.Router();
 const Property = require('../models/Property');
 const Address = require('../models/Address');
 const upload = require('../config/uploadConfig');
-const fs = require('fs.extra')
+const fs = require('fs')
 const path = require('path');
 
 // get all properties
@@ -97,13 +97,28 @@ router.post('/upload/:propertyId', (req, res) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
-
-    if (!req.file) {
+    if (!req.files || req.files.length === 0) { 
       return res.status(400).json({ error: 'No file selected' });
     }
-
-    // Send a response to the client
-    res.status(200).json({ message: 'File uploaded successfully', filePath: req.file.path });
+    
+    const root = path.join(__dirname, 'uploads', propertyId);
+    
+    try {
+      console.log('entoru no try')
+      const fileNames = fs.readdirSync(root);
+      console.log('leu os arquivos do dir')
+      const filePaths = fileNames.map(fileName => `/uploads/${propertyId}/${fileName}`);
+      console.log('pegou os path')
+      
+      console.log('files: ', filePaths);
+      
+      res.status(200).json({
+        message: 'Files uploaded successfully',
+        filePaths
+      });
+    } catch (err) {
+      res.status(500).json({ error: 'Error reading uploaded files' });
+    }
   });
 });
 

@@ -35,7 +35,7 @@ interface Address{
 }
 
 const Properties:React.FC = () => {
-    const API_URL:string = 'http://localhost:5000/properties';
+    const API_URL:string = 'http://localhost:3000/properties';
     const tableHeader:HeaderList[] = [
         {
             key:1,
