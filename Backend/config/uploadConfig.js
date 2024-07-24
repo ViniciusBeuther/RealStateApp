@@ -8,7 +8,6 @@ const path = require('path');
 // Set storage engine
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-
       const splitPath = req.originalUrl.split('/');
       const propertyId = splitPath[3];
       
@@ -41,6 +40,7 @@ const upload = multer({
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single('image');
+}).array('images', 10);
 
 module.exports = upload;
+ 

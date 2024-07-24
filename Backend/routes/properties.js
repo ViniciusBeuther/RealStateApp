@@ -92,21 +92,21 @@ router.put('/update/:id', async (req, res) => {
 router.post('/upload/:propertyId', (req, res) => {
   const { propertyId } = req.params;
   console.log('router id: ', propertyId);
-  
 
   upload(req, res, async (err) => {
-    // console.log('body no router: ', req.body);
-    
     if (err) {
-      return res.status(400).json({ error: err });
+      return res.status(400).json({ error: err.message });
     }
 
     if (!req.file) {
       return res.status(400).json({ error: 'No file selected' });
     }
+
+    // Send a response to the client
+    res.status(200).json({ message: 'File uploaded successfully', filePath: req.file.path });
   });
-  
 });
+
 
 
 module.exports = router;

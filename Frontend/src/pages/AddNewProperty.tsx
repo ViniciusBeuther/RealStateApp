@@ -156,7 +156,9 @@ const AddNewProperty: React.FC = () => {
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (ev: React.FormEvent) => {
+    ev.preventDefault();
+    
     if (!image) {
       setError("Selecione uma imagem");
       return;
@@ -166,93 +168,46 @@ const AddNewProperty: React.FC = () => {
 
     formData.append("image", image);
     formData.append("propertyId", propertyId);
+    console.log('adicionou no formdata')
 
-    try {
-      const response = await fetch(
-        `http://localhost:8000/properties/upload/${propertyId}`,
-        {
-          method: "POST",
-          body: formData,
+    async function uploadImg(){
+        try {
+            console.log(`http://localhost:8000/properties/upload/${propertyId}`);
+            console.log(image);
+            console.log(propertyId);
+
+          const response = await fetch(
+            `http://localhost:3000/properties/upload/${propertyId}`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          )
+          console.log(`passou`)
+          
+         // const filesInsideOfImgFolder = fs.readdirSync(imagesDirectory);
+        } catch (error) {
+          console.error("Erro ao enviar imagem:", error);
         }
-      ); 
-
-      const data = await response.json();
-      const imagesDirectory = rootImageFolder + '/' + propertyId;
-      const filesInsideOfImgFolder = fs.readdirSync(imagesDirectory);
-      setImagesUrl(filesInsideOfImgFolder);
-
-      setUploadedImagePath(data.imagePath);
-    } catch (error) {
-      console.error("Erro ao enviar imagem:", error);
-      setError("Erro ao enviar imagem. Verifique o console para mais detalhes.");
     }
+
+    await uploadImg();
   };
 
-  const handleSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault();
-    const propertyId = uuidv4();
-    
-    console.log("submitted");
-
-    const tempType = checkPropertyType(typeProp);
-
-    const objToInsertInDB: Data = {
-      id: propertyId,
-      number_rooms: parseInt(numberOfRooms),
-      number_bathrooms: parseInt(numberOfBathrooms),
-      all_rooms: allRooms,
-      square_meters: parseFloat(squareMeters),
-      description: description,
-      type: tempType,
-      image_url: uploadedImagePath,
-      price: price,
-      wasSold: Boolean(wasSold),
-      contact: contact,
-      address: {
-        city: "SBS",
-        country: "Brazil",
-        id: uuidv4(),
-        neighborhood: "Cruzeiro",
-        number: 1,
-        property_id: propertyId,
-        state: "Santa Catarina",
-        street: "Rua do Bar",
-      },
-    };
-    console.log(objToInsertInDB);
-
-    try {
-      const response = await fetch("http://localhost:8000/properties", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(objToInsertInDB),
-      });
-
-      if (response.ok) {
-        console.log("Propriedade adicionada com sucesso");
-        clearInputFields();
-      } else {
-        console.error("Erro ao adicionar propriedade");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar os dados:", error);
-    }
-  };
   return (
     <section className="w-full h-full rounded-xl bg-violet-400 flex">
       <article className="w-full h-full bg-green-200">
         <h1 className="text-2xl font-bold">Preencha os Dados da Propriedade</h1>
 
-        <form onSubmit={handleSubmit}>
-          {formInput.map((element) => (
+        <form onSubmit={handleUpload}>
+          {formInput.map((element, idx) => (
             <FormInput
               handleChange={element.handleChange}
               label={element.label}
               type={element.type}
               value={element.value}
               placeholder={element.placeholder}
+              key={idx}
             />
           ))}
 
