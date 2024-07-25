@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
       const splitPath = req.originalUrl.split('/');
       const propertyId = splitPath[3];
       
-      const path = './uploads/tempDir/' + propertyId;
+      const path = './uploads/' + propertyId;
       fs.mkdirSync(path, { recursive: true })
     return cb(null, path)
   },

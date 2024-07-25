@@ -88,6 +88,9 @@ router.put('/update/:id', async (req, res) => {
     }
 })
 
+
+// ROUTES FOR UPLOAD OF THE IMAGES
+
 // Image upload route
 router.post('/upload/:propertyId', (req, res) => {
   const { propertyId } = req.params;
@@ -95,21 +98,21 @@ router.post('/upload/:propertyId', (req, res) => {
 
   upload(req, res, async (err) => {
     if (err) {
+      console.log('Upload error:', err);
       return res.status(400).json({ error: err.message });
     }
     if (!req.files || req.files.length === 0) { 
+      console.log('No file selected');
       return res.status(400).json({ error: 'No file selected' });
     }
-    
-    const root = path.join(__dirname, 'uploads', propertyId);
+
+    const root = path.join(__dirname, '..', 'uploads', propertyId);
+    console.log('Upload directory:', root);
     
     try {
-      console.log('entoru no try')
-      const fileNames = fs.readdirSync(root);
-      console.log('leu os arquivos do dir')
+      const fileNames = fs.readdirSync(root,);
       const filePaths = fileNames.map(fileName => `/uploads/${propertyId}/${fileName}`);
-      console.log('pegou os path')
-      
+
       console.log('files: ', filePaths);
       
       res.status(200).json({
@@ -117,10 +120,26 @@ router.post('/upload/:propertyId', (req, res) => {
         filePaths
       });
     } catch (err) {
+      console.log('Error reading uploaded files:', err);
       res.status(500).json({ error: 'Error reading uploaded files' });
     }
   });
 });
+
+// Route to get image files for a property ID
+router.get('/upload/:propertyId', (req, res) => {
+  const { propertyId } = req.params;
+  const imageRoot = `C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\${propertyId}\\`;
+  
+  const files = fs.readdirSync( imageRoot );
+  console.log('files: ', files)
+  if(!files){
+    return res.status(404).json({ error: 'Folder is empty!' })
+  }
+
+  res.status(200).json(files);
+
+})
 
 
 
