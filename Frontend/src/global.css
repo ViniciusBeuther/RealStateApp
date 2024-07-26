@@ -77,12 +77,18 @@ body, html{
   
   }
 
-  .DashboardBackgroundPattern, .PropertiesBackgroundPattern{
+  .DashboardBackgroundPattern, .PropertiesBackgroundPattern, .AddPropertyBackgroundPattern{
     background-image: url('../public/icons/dashboard-background-pattern.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
   }
 
+  .AddPropertyForm{
+      background: rgba( 255, 255, 255, 0.25 );
+      box-shadow: 0 8px 32px 0 rgba(8, 36, 21, 0.37);
+      border-radius: 10px;
+      border: 1px solid rgba( 255, 255, 255, 0.18 );
+  }
 
 

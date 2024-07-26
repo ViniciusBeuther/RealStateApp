@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./config/database');
 const cors = require('cors');
+const path = require('path')
 
 // Test DB
 db.authenticate()
@@ -10,6 +11,7 @@ db.authenticate()
 const app = express();
 
 // Middleware
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())

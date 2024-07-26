@@ -5,6 +5,15 @@ const Address = require('../models/Address');
 const upload = require('../config/uploadConfig');
 const fs = require('fs')
 const path = require('path');
+/* 
+  Main CRUD routes
+  - Get all properties
+  - Get a property by ID
+  - Add a new property
+  - Delete property from DB by ID
+  - Update a property
+*/
+
 
 // get all properties
 router.get('/', async (req, res) => {
@@ -89,7 +98,12 @@ router.put('/update/:id', async (req, res) => {
 })
 
 
-// ROUTES FOR UPLOAD OF THE IMAGES
+
+/* 
+  Routes to handle image upload and return images from local storage system
+    - Route to upload the file into the system
+    - Route to get the images inside of a folder named with the property ID
+*/
 
 // Image upload route
 router.post('/upload/:propertyId', (req, res) => {
@@ -126,21 +140,25 @@ router.post('/upload/:propertyId', (req, res) => {
   });
 });
 
-// Route to get image files for a property ID
+/// Route to get image files for a property ID
 router.get('/upload/:propertyId', (req, res) => {
   const { propertyId } = req.params;
-  const imageRoot = `C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads\\${propertyId}\\`;
-  
-  const files = fs.readdirSync( imageRoot );
-  console.log('files: ', files)
-  if(!files){
-    return res.status(404).json({ error: 'Folder is empty!' })
+  const imageRoot = path.join(__dirname, '..', 'uploads', propertyId);
+
+  try {
+    const files = fs.readdirSync(imageRoot);
+    console.log('files: ', files);
+    if (!files) {
+      return res.status(404).json({ error: 'Folder is empty!' });
+    }
+
+    const filePaths = files.map(file => `/uploads/${propertyId}/${file}`);
+    res.status(200).json(filePaths);
+  } catch (err) {
+    console.log('Error reading uploaded files:', err);
+    res.status(500).json({ error: 'Error reading uploaded files' });
   }
-
-  res.status(200).json(files);
-
-})
-
+});
 
 
 module.exports = router;

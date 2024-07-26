@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Address = require('../models/Address');
-const Property = require('../models/Property');
+
+/* 
+  Main CRUD routes
+  - Get all addresses
+  - Add a new address
+  - Delete address from DB by ID
+  - Update a address
+*/
 
 // get all addresses
 router.get('/', async (req, res) => {

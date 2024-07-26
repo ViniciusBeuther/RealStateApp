@@ -1,6 +1,5 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import FormInput from "../Components/FormInput";
-import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
 interface Data {
@@ -45,11 +44,15 @@ const AddNewProperty: React.FC = () => {
   const [squareMeters, setSquareMeters] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [typeProp, setTypeProp] = useState<string>("");
-  const [imagesUrl, setImagesUrl] = useState<string[]>(['']);
+  const [imagesUrl, setImagesUrl] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(0);
-  const [wasSold, setWasSold] = useState<boolean>();
+  const [wasSold, setWasSold] = useState<boolean>(false);
   const [contact, setContact] = useState<string>("");
-  const [paths, setPaths] = useState<string[]>(['']);
+  const [propertyId, setPropertyId] = useState<string>('');
+  const [image, setImage] = useState<FileList | null>(null);
+  const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
   const formInput: InputParams[] = [
     {
       id: "numberOfRooms",
@@ -100,8 +103,8 @@ const AddNewProperty: React.FC = () => {
       placeholder: "",
     },
     {
-      id: "type",
-      handleChange: (ev: any) => setPrice(ev.target.value),
+      id: "price",
+      handleChange: (ev: any) => setPrice(Number(ev.target.value)),
       label: "Valor do Imóvel",
       type: "number",
       value: price,
@@ -116,21 +119,15 @@ const AddNewProperty: React.FC = () => {
       placeholder: "",
     },
   ];
-  const [image, setImage] = useState<FileList | null>(null);
-  const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const rootImageFolder =
-    "C:\\Users\\vinic\\OneDrive\\Área de Trabalho\\OneBitCode\\Portfolio\\Fullstack\\RealStateApp\\Backend\\uploads";
-    const [propertyId, setPropertyId] = useState<string>('');
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-          setImage(e.target.files);
-        }
-      };
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files);
+    }
+  };
 
   const clearInputFields = () => {
-    setNumberOfBathrooms("");
+    setNumberOfRooms("");
     setNumberOfBathrooms("");
     setAllRooms("");
     setSquareMeters("");
@@ -144,84 +141,57 @@ const AddNewProperty: React.FC = () => {
     setError("");
   };
 
-  // Function used to check the type of the property (house or apartment)
   const checkPropertyType = (type: string) => {
-    let tempVar: string = "";
-
-    if (type == "1") {
-      return (tempVar = "Casa");
-    } else if (type == "2") {
-      return (tempVar = "Apartamento");
-    } else {
-      return (tempVar = "Error");
-    }
+    return type === "1" ? "Casa" : type === "2" ? "Apartamento" : "Error";
   };
 
-  // Function to upload the images to the backend and call GetImages to set the state of images URL
   const handleUpload = async () => {
-    
     if (!image) {
       setError("Selecione uma imagem");
       return;
     }
-    setPropertyId(uuidv4());
+
+    const newPropertyId = uuidv4();
+    setPropertyId(newPropertyId);
+
     const formData = new FormData();
 
-    Array.from(image).forEach((image) => {
-        formData.append('images', image);
-    })
-    formData.append("propertyId", propertyId);
+    Array.from(image).forEach((img) => {
+      formData.append('images', img);
+    });
 
-    async function uploadImg(){
-        try {
-            console.log(image);
-            console.log(propertyId);
+    formData.append("propertyId", newPropertyId);
 
-          const response = await fetch(
-            `http://localhost:3000/properties/upload/${propertyId}`,
-            {
-              method: "POST",
-              body: formData,
-            }
-          ).then((results) => {
-            console.log(results.json())
-        })
+    try {
+      const response = await fetch(
+        `http://localhost:3000/properties/upload/${newPropertyId}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erro ao enviar imagem');
+      }
+
+      const result = await response.json();
+      const filePaths = result.filePaths;
+      setImagesUrl(filePaths);
+
     } catch (error) {
-        console.error("Erro ao enviar imagem:", error);
+      console.error("Erro ao enviar imagem:", error);
+      setError('Erro ao enviar imagem');
     }
-}
-
-    await uploadImg();
-    setTimeout(() => {
-        getImages( propertyId );
-    }, 1000 * 2)
   };
 
-  // Function to get the images inside of the property ID image's folder and 
-  // assign the value to the state of ImagesUrl
- async function getImages( propertyId:string ){
-    fetch(`http://localhost:3000/properties/upload/${propertyId}`)
-    .then(response => response.json())
-    .then((data) => {
-        setPaths(data);
-    })
-
-    setTimeout(() => {
-        let imagePaths:string[] = [];
-        paths.forEach((imageName:string) => {
-            imagePaths.push(rootImageFolder + '\\' + propertyId + '\\' + imageName);
-        })
-    
-        setImagesUrl( imagePaths );
-        console.log('url: ', imagesUrl);
-    }, 1000 * 2)
-  }
-
-  async function handleSubmit( ev:React.FormEvent ){
+  const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     await handleUpload();
-
-    const dataToInsert:Data = {
+    
+    if (imagesUrl.length !== 0) {
+      const dataToInsert: Data = {
         id: propertyId,
         number_bathrooms: parseInt(numberOfBathrooms),
         number_rooms: parseInt(numberOfRooms),
@@ -232,43 +202,45 @@ const AddNewProperty: React.FC = () => {
         price: price,
         type: checkPropertyType(typeProp),
         square_meters: parseFloat(squareMeters),
-        wasSold: false,
+        wasSold: wasSold,
         address: {
-            id: uuidv4(),
-            property_id: propertyId,
-            country: 'Brasil',
-            state: 'Santa Catarina',
-            city: 'São Bento do Sul',
-            neighborhood: 'Bairro de SBS',
-            street: 'Rua do Irineu Shcasok',
-            number: 100,
+          id: uuidv4(),
+          property_id: propertyId,
+          country: 'Brasil',
+          state: 'Santa Catarina',
+          city: 'São Bento do Sul',
+          neighborhood: 'Bairro de SBS',
+          street: 'Rua do Irineu Shcasok',
+          number: 300,
         }
-    }
+      };
 
-    async function insertInDB( data: Data ){
-        try{
-            await fetch('http://localhost:3000/add', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-              });
-        } catch( error:any ){
-            return console.log('error inserindo dados: ', error);
+      try {
+        const response = await fetch('http://localhost:3000/properties/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToInsert),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Erro ao inserir dados no banco');
         }
+
+        clearInputFields();
+      } catch (error: any) {
+        console.log('Erro inserindo dados: ', error);
+      }
     }
-
-    await insertInDB(dataToInsert);
-
-  }
+  };
 
   return (
-    <section className="w-full h-full rounded-xl bg-violet-400 flex">
-      <article className="w-full h-full bg-green-200">
-        <h1 className="text-2xl font-bold">Preencha os Dados da Propriedade</h1>
-
-        <form onSubmit={handleSubmit} name="images">
+    <section className="w-full h-full rounded-xl AddPropertyBackgroundPattern flex">
+      <article className="w-full flex flex-col items-center justify-start mt-5">
+        <form onSubmit={handleSubmit} name="images" className="AddPropertyForm py-6 px-12">
+            <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados da Propriedade</h1>
           {formInput.map((element, idx) => (
             <FormInput
               handleChange={element.handleChange}
@@ -281,21 +253,10 @@ const AddNewProperty: React.FC = () => {
           ))}
 
           <div>
-            <h2>Upload de Imagem</h2>
+            <h2>Selecione as images da propriedade</h2>
             <div>
               <input type="file" onChange={handleFileChange} multiple />
             </div>
-            
-            {uploadedImagePath && (
-              <div>
-                <h3>Imagem Enviada:</h3>
-                <img
-                  src={`http://localhost:5000${uploadedImagePath}`}
-                  alt="Imagem Enviada"
-                  style={{ maxWidth: "100%" }}
-                />
-              </div>
-            )}
             {error && (
               <div style={{ color: "red" }}>
                 <p>{error}</p>
@@ -306,7 +267,7 @@ const AddNewProperty: React.FC = () => {
           <button type="submit">Enviar</button>
         </form>
       </article>
-      <article className="w-full h-full bg-red-200">Side 02</article>
+      <article className="w-full">Side 02</article>
     </section>
   );
 };

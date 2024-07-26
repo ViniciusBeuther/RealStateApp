@@ -14,7 +14,7 @@ const Property = db.define('property', {
         type: Sequelize.INTEGER
     },
     all_rooms: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
+        type: Sequelize.STRING
     },
     square_meters: {
         type: Sequelize.FLOAT
@@ -26,7 +26,7 @@ const Property = db.define('property', {
         type: Sequelize.STRING
     },
     image_url: {
-        type: Sequelize.STRING
+        type: Sequelize.ARRAY(Sequelize.STRING)
     },
     price: {
         type: Sequelize.FLOAT
