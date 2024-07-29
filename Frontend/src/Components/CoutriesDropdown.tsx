@@ -1,9 +1,12 @@
+interface CountriesDropdownProps{
+    stateControl: (value: string) => void;
+}
 
-const CountriesDropdown: React.FC = () => {
-    
+const CountriesDropdown: React.FC<CountriesDropdownProps> = ({ stateControl }) => {
   return (
     <>
-      <select id="country" name="country" className="form-control" onChange={(ev:any) => controlState(ev.target.value)}>
+      <label htmlFor="label" className="text-left w-full">País:</label>
+      <select id="country" name="country" className="form-control outline-none py-2 px-4 rounded-md shadow-md w-full" onChange={(ev:any) => stateControl(ev.target.value)}>
         <option value="Afghanistan">Afghanistan</option>
         <option value="Åland Islands">Åland Islands</option>
         <option value="Albania">Albania</option>

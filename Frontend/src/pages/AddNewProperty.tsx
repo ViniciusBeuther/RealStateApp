@@ -61,14 +61,6 @@ const AddNewProperty: React.FC = () => {
 
   const addressInputs: InputParams[] = [
     {
-        id: "country",
-        label: "País: ",
-        type: "text",
-        value: country,
-        handleChange: (ev: any) => setCountry(ev.target.value),
-        placeholder: "",
-    },
-    {
         id: "state",
         label: "Estado (UF): ",
         type: "text",
@@ -328,6 +320,7 @@ const AddNewProperty: React.FC = () => {
         </form>
       </article>
       <article className="w-full">
+      <CountriesDropdown stateControl={setCountry} />
         {addressInputs.map((element, idx) => (
             <FormInput
             handleChange={element.handleChange}
@@ -336,10 +329,9 @@ const AddNewProperty: React.FC = () => {
             value={element.value}
             placeholder={element.placeholder}
             key={idx}
-            />
+            /> 
         ))}
 
-        <CountriesDropdown />
       </article>
     </section>
   );
