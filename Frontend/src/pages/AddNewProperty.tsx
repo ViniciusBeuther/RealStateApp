@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import FormInput from "../Components/FormInput";
 import { v4 as uuidv4 } from "uuid";
+import CountriesDropdown from "../Components/CoutriesDropdown";
 
 interface Data {
   id: string;
@@ -50,8 +51,64 @@ const AddNewProperty: React.FC = () => {
   const [contact, setContact] = useState<string>("");
   const [propertyId, setPropertyId] = useState<string>('');
   const [image, setImage] = useState<FileList | null>(null);
-  const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
+  const [country, setCountry] = useState<string>('Brasil');
+  const [state, setState] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [neighborhood, setNeighborhood] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
+  const [number, setNumber] = useState<number>();
   const [error, setError] = useState<string>("");
+
+  const addressInputs: InputParams[] = [
+    {
+        id: "country",
+        label: "País: ",
+        type: "text",
+        value: country,
+        handleChange: (ev: any) => setCountry(ev.target.value),
+        placeholder: "",
+    },
+    {
+        id: "state",
+        label: "Estado (UF): ",
+        type: "text",
+        value: state,
+        handleChange: (ev: any) => setState(ev.target.value),
+        placeholder: "",
+    },
+    {
+        id: "city",
+        label: "Cidade: ",
+        type: "text",
+        value: city,
+        handleChange: (ev: any) => setCity(ev.target.value),
+        placeholder: "",
+    },
+    {
+        id: "neighborhood",
+        label: "Bairro: ",
+        type: "text",
+        value: neighborhood,
+        handleChange: (ev: any) => setNeighborhood(ev.target.value),
+        placeholder: "",
+    },
+    {
+        id: "street",
+        label: "Rua: ",
+        type: "text",
+        value: street,
+        handleChange: (ev: any) => setStreet(ev.target.value),
+        placeholder: "",
+    },
+    {
+        id: "number",
+        label: "Número do Imóvel: ",
+        type: "text",
+        value: number || 0,
+        handleChange: (ev: any) => setNumber(ev.target.value),
+        placeholder: "",
+    },
+]
 
   const formInput: InputParams[] = [
     {
@@ -141,10 +198,12 @@ const AddNewProperty: React.FC = () => {
     setError("");
   };
 
+
   const checkPropertyType = (type: string) => {
-    return type === "1" ? "Casa" : type === "2" ? "Apartamento" : "Error";
+    return type === "1" ? "Apartamento" : type === "2" ? "Casa" : "Error";
   };
 
+  // Function to upload the images for the backend thru HTTP request (POST)
   const handleUpload = async () => {
     if (!image) {
       setError("Selecione uma imagem");
@@ -186,6 +245,7 @@ const AddNewProperty: React.FC = () => {
     }
   };
 
+  // Function to submit the form
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     await handleUpload();
@@ -252,10 +312,10 @@ const AddNewProperty: React.FC = () => {
             />
           ))}
 
-          <div>
+          <div className="my-5">
             <h2>Selecione as images da propriedade</h2>
-            <div>
-              <input type="file" onChange={handleFileChange} multiple />
+            <div className="">
+              <input id="FormInputFile" type="file" onChange={handleFileChange} multiple />
             </div>
             {error && (
               <div style={{ color: "red" }}>
@@ -264,10 +324,23 @@ const AddNewProperty: React.FC = () => {
             )}
           </div>
 
-          <button type="submit">Enviar</button>
+          <button type="submit" className="bg-primary-400 text-white rounded-md py-2 px-5 shadow-lg hover:bg-primary-500">Adicionar imóvel</button>
         </form>
       </article>
-      <article className="w-full">Side 02</article>
+      <article className="w-full">
+        {addressInputs.map((element, idx) => (
+            <FormInput
+            handleChange={element.handleChange}
+            label={element.label}
+            type={element.type}
+            value={element.value}
+            placeholder={element.placeholder}
+            key={idx}
+            />
+        ))}
+
+        <CountriesDropdown />
+      </article>
     </section>
   );
 };
