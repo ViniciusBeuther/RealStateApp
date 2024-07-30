@@ -6,7 +6,7 @@ const CountriesDropdown: React.FC<CountriesDropdownProps> = ({ stateControl }) =
   return (
     <>
       <label htmlFor="label" className="text-left w-full">País:</label>
-      <select id="country" name="country" className="form-control outline-none py-2 px-4 rounded-md shadow-md w-full" onChange={(ev:any) => stateControl(ev.target.value)}>
+      <select id="country" name="country" className="form-control outline-none py-2 px-4 rounded-md shadow-md w-full mb-2" onChange={(ev:any) => stateControl(ev.target.value)}>
         <option value="Afghanistan">Afghanistan</option>
         <option value="Åland Islands">Åland Islands</option>
         <option value="Albania">Albania</option>
@@ -37,7 +37,7 @@ const CountriesDropdown: React.FC<CountriesDropdownProps> = ({ stateControl }) =
         <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
         <option value="Botswana">Botswana</option>
         <option value="Bouvet Island">Bouvet Island</option>
-        <option value="Brazil">Brazil</option>
+        <option value="Brazil" defaultChecked>Brasil</option>
         <option value="British Indian Ocean Territory">
           British Indian Ocean Territory
         </option>

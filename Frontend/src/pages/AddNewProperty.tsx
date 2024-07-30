@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import FormInput from "../Components/FormInput";
 import { v4 as uuidv4 } from "uuid";
 import CountriesDropdown from "../Components/CoutriesDropdown";
+import CityStateSelect from "../Components/CityStateSelect";
 
 interface Data {
   id: string;
@@ -60,22 +61,6 @@ const AddNewProperty: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   const addressInputs: InputParams[] = [
-    {
-        id: "state",
-        label: "Estado (UF): ",
-        type: "text",
-        value: state,
-        handleChange: (ev: any) => setState(ev.target.value),
-        placeholder: "",
-    },
-    {
-        id: "city",
-        label: "Cidade: ",
-        type: "text",
-        value: city,
-        handleChange: (ev: any) => setCity(ev.target.value),
-        placeholder: "",
-    },
     {
         id: "neighborhood",
         label: "Bairro: ",
@@ -259,11 +244,11 @@ const AddNewProperty: React.FC = () => {
           id: uuidv4(),
           property_id: propertyId,
           country: 'Brasil',
-          state: 'Santa Catarina',
-          city: 'São Bento do Sul',
-          neighborhood: 'Bairro de SBS',
-          street: 'Rua do Irineu Shcasok',
-          number: 300,
+          state: state,
+          city: city,
+          neighborhood: neighborhood,
+          street: street,
+          number: number||0,
         }
       };
 
@@ -287,6 +272,22 @@ const AddNewProperty: React.FC = () => {
       }
     }
   };
+
+  const insertAddres = async () => {
+    const address = {
+        id: uuidv4(),
+        property_id: propertyId,
+        country: 'Brasil',
+        state: state,
+        city: city,
+        neighborhood: neighborhood,
+        street: street,
+        number: number||0,
+  }
+
+  await fetch()
+
+}
 
   return (
     <section className="w-full h-full rounded-xl AddPropertyBackgroundPattern flex">
@@ -321,6 +322,7 @@ const AddNewProperty: React.FC = () => {
       </article>
       <article className="w-full">
       <CountriesDropdown stateControl={setCountry} />
+      <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
         {addressInputs.map((element, idx) => (
             <FormInput
             handleChange={element.handleChange}
