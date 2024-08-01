@@ -56,6 +56,7 @@ router.get('/:id', async (req, res) => {
 router.post('/add', async (req, res) => {
   try {
     const property = await Property.create(req.body);
+    const address = await Address.create(req.body);
     res.status(201).json(property);
   } catch (err) {
     console.log(err);

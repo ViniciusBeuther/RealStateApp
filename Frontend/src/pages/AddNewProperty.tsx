@@ -50,7 +50,7 @@ const AddNewProperty: React.FC = () => {
   const [price, setPrice] = useState<number>(0);
   const [wasSold, setWasSold] = useState<boolean>(false);
   const [contact, setContact] = useState<string>("");
-  const [propertyId, setPropertyId] = useState<string>('');
+  const [propertyId, setPropertyId] = useState<string>(uuidv4());
   const [image, setImage] = useState<FileList | null>(null);
   const [country, setCountry] = useState<string>('Brasil');
   const [state, setState] = useState<string>('');
@@ -62,30 +62,30 @@ const AddNewProperty: React.FC = () => {
 
   const addressInputs: InputParams[] = [
     {
-        id: "neighborhood",
-        label: "Bairro: ",
-        type: "text",
-        value: neighborhood,
-        handleChange: (ev: any) => setNeighborhood(ev.target.value),
-        placeholder: "",
+      id: "neighborhood",
+      label: "Bairro: ",
+      type: "text",
+      value: neighborhood,
+      handleChange: (ev: any) => setNeighborhood(ev.target.value),
+      placeholder: "",
     },
     {
-        id: "street",
-        label: "Rua: ",
-        type: "text",
-        value: street,
-        handleChange: (ev: any) => setStreet(ev.target.value),
-        placeholder: "",
+      id: "street",
+      label: "Rua: ",
+      type: "text",
+      value: street,
+      handleChange: (ev: any) => setStreet(ev.target.value),
+      placeholder: "",
     },
     {
-        id: "number",
-        label: "Número do Imóvel: ",
-        type: "text",
-        value: number || 0,
-        handleChange: (ev: any) => setNumber(ev.target.value),
-        placeholder: "",
+      id: "number",
+      label: "Número do Imóvel: ",
+      type: "text",
+      value: number || 0,
+      handleChange: (ev: any) => setNumber(ev.target.value),
+      placeholder: "",
     },
-]
+  ];
 
   const formInput: InputParams[] = [
     {
@@ -175,7 +175,6 @@ const AddNewProperty: React.FC = () => {
     setError("");
   };
 
-
   const checkPropertyType = (type: string) => {
     return type === "1" ? "Apartamento" : type === "2" ? "Casa" : "Error";
   };
@@ -187,20 +186,17 @@ const AddNewProperty: React.FC = () => {
       return;
     }
 
-    const newPropertyId = uuidv4();
-    setPropertyId(newPropertyId);
-
     const formData = new FormData();
 
     Array.from(image).forEach((img) => {
       formData.append('images', img);
     });
 
-    formData.append("propertyId", newPropertyId);
+    formData.append("propertyId", propertyId);
 
     try {
       const response = await fetch(
-        `http://localhost:3000/properties/upload/${newPropertyId}`,
+        `http://localhost:3000/properties/upload/${propertyId}`,
         {
           method: "POST",
           body: formData,
@@ -219,6 +215,36 @@ const AddNewProperty: React.FC = () => {
     } catch (error) {
       console.error("Erro ao enviar imagem:", error);
       setError('Erro ao enviar imagem');
+    }
+  };
+
+  const insertAddress = async (propertyId: string) => {
+    const address = {
+      id: uuidv4(),
+      property_id: propertyId,
+      country: 'Brasil',
+      state: state,
+      city: city,
+      neighborhood: neighborhood,
+      street: street,
+      number: number || 0,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/addresses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(address),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erro ao inserir endereço no banco');
+      }
+    } catch (error) {
+      console.error('Erro inserindo endereço:', error);
     }
   };
 
@@ -248,7 +274,7 @@ const AddNewProperty: React.FC = () => {
           city: city,
           neighborhood: neighborhood,
           street: street,
-          number: number||0,
+          number: number || 0,
         }
       };
 
@@ -266,34 +292,19 @@ const AddNewProperty: React.FC = () => {
           throw new Error(errorText || 'Erro ao inserir dados no banco');
         }
 
+        await insertAddress(propertyId);
         clearInputFields();
       } catch (error: any) {
-        console.log('Erro inserindo dados: ', error);
+        console.error('Erro inserindo dados:', error);
       }
     }
   };
-
-  const insertAddres = async () => {
-    const address = {
-        id: uuidv4(),
-        property_id: propertyId,
-        country: 'Brasil',
-        state: state,
-        city: city,
-        neighborhood: neighborhood,
-        street: street,
-        number: number||0,
-  }
-
-  await fetch()
-
-}
 
   return (
     <section className="w-full h-full rounded-xl AddPropertyBackgroundPattern flex">
       <article className="w-full flex flex-col items-center justify-start mt-5">
         <form onSubmit={handleSubmit} name="images" className="AddPropertyForm py-6 px-12">
-            <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados da Propriedade</h1>
+          <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados da Propriedade</h1>
           {formInput.map((element, idx) => (
             <FormInput
               handleChange={element.handleChange}
@@ -306,7 +317,7 @@ const AddNewProperty: React.FC = () => {
           ))}
 
           <div className="my-5">
-            <h2>Selecione as images da propriedade</h2>
+            <h2>Selecione as imagens da propriedade</h2>
             <div className="">
               <input id="FormInputFile" type="file" onChange={handleFileChange} multiple />
             </div>
@@ -321,19 +332,18 @@ const AddNewProperty: React.FC = () => {
         </form>
       </article>
       <article className="w-full">
-      <CountriesDropdown stateControl={setCountry} />
-      <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
+        <CountriesDropdown stateControl={setCountry} />
+        <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
         {addressInputs.map((element, idx) => (
-            <FormInput
+          <FormInput
             handleChange={element.handleChange}
             label={element.label}
             type={element.type}
             value={element.value}
             placeholder={element.placeholder}
             key={idx}
-            /> 
+          />
         ))}
-
       </article>
     </section>
   );
