@@ -218,9 +218,9 @@ const AddNewProperty: React.FC = () => {
     }
   };
 
-  const insertAddress = async (propertyId: string) => {
+  const insertAddress = async (propertyId: string, addressId: string) => {
     const address = {
-      id: uuidv4(),
+      id: addressId,
       property_id: propertyId,
       country: 'Brasil',
       state: state,
@@ -231,7 +231,7 @@ const AddNewProperty: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/addresses', {
+      const response = await fetch('http://localhost:3000/addresses/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ const AddNewProperty: React.FC = () => {
           throw new Error(errorText || 'Erro ao inserir dados no banco');
         }
 
-        await insertAddress(propertyId);
+        await insertAddress(propertyId, dataToInsert.address.id);
         clearInputFields();
       } catch (error: any) {
         console.error('Erro inserindo dados:', error);
