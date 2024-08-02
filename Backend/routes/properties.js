@@ -56,8 +56,13 @@ router.get('/:id', async (req, res) => {
 router.post('/add', async (req, res) => {
   try {
     const property = await Property.create(req.body);
-    const address = await Address.create(req.body);
+    if( property != undefined || property != null){
+      //const newAddress = await Address.create(req.body);
+      console.log('novo endereço salvo?: ');
+    }
+    
     res.status(201).json(property);
+    console.log('salvou a property')
   } catch (err) {
     console.log(err);
     res.status(500).send('Server Error');

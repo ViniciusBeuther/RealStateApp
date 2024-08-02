@@ -245,7 +245,8 @@ const AddNewProperty: React.FC = () => {
       }
     } catch (error) {
       console.error('Erro inserindo endereço:', error);
-    }
+    } 
+   console.log('insertADdress')
   };
 
   // Function to submit the form
@@ -292,7 +293,9 @@ const AddNewProperty: React.FC = () => {
           throw new Error(errorText || 'Erro ao inserir dados no banco');
         }
 
-        await insertAddress(propertyId, dataToInsert.address.id);
+        setTimeout(async () => {
+            await insertAddress(propertyId, dataToInsert.address.id);
+        }, 1000 * 3)
         clearInputFields();
       } catch (error: any) {
         console.error('Erro inserindo dados:', error);
@@ -331,19 +334,23 @@ const AddNewProperty: React.FC = () => {
           <button type="submit" className="bg-primary-400 text-white rounded-md py-2 px-5 shadow-lg hover:bg-primary-500">Adicionar imóvel</button>
         </form>
       </article>
-      <article className="w-full">
+      <article className="w-full flex flex-col items-center justify-start mt-5 mr-5">
+      <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados do Endereço</h1>
         <CountriesDropdown stateControl={setCountry} />
         <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
-        {addressInputs.map((element, idx) => (
-          <FormInput
-            handleChange={element.handleChange}
-            label={element.label}
-            type={element.type}
-            value={element.value}
-            placeholder={element.placeholder}
-            key={idx}
-          />
-        ))}
+        <div className="w-full">
+            {addressInputs.map((element, idx) => (
+            <FormInput
+                handleChange={element.handleChange}
+                label={element.label}
+                type={element.type}
+                value={element.value}
+                placeholder={element.placeholder}
+                key={idx}
+            />
+            ))}
+
+        </div>
       </article>
     </section>
   );

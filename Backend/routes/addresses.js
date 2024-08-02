@@ -27,7 +27,8 @@ router.post('/add', async (req, res) => {
     try{
         const { property_id, country, state, city, neighborhood, street, number } = req.body;
 
-        const newAddress = await Address.create(req.body)
+        const newAddress = await Address.create(req.body);
+        console.log('inserindo address pela HTTP /address/add')
         /*const newAddress = await Address.create({
           property_id,
           country,
