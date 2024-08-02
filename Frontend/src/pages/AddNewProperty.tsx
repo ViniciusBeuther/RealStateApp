@@ -160,6 +160,7 @@ const AddNewProperty: React.FC = () => {
     }
   };
 
+  // Function to reset the inputs to default values
   const clearInputFields = () => {
     setNumberOfRooms("");
     setNumberOfBathrooms("");
@@ -172,6 +173,11 @@ const AddNewProperty: React.FC = () => {
     setContact("");
     setImagesUrl([]);
     setImage(null);
+    setCountry('');
+    setState('');
+    setNeighborhood('');
+    setStreet('');
+    setNumber(0);
     setError("");
   };
 
@@ -304,54 +310,58 @@ const AddNewProperty: React.FC = () => {
   };
 
   return (
-    <section className="w-full h-full rounded-xl AddPropertyBackgroundPattern flex">
-      <article className="w-full flex flex-col items-center justify-start mt-5">
-        <form onSubmit={handleSubmit} name="images" className="AddPropertyForm py-6 px-12">
-          <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados da Propriedade</h1>
-          {formInput.map((element, idx) => (
-            <FormInput
-              handleChange={element.handleChange}
-              label={element.label}
-              type={element.type}
-              value={element.value}
-              placeholder={element.placeholder}
-              key={idx}
-            />
-          ))}
+    <section className="w-full h-full rounded-xl AddPropertyBackgroundPattern">
+        <section className="flex h-auto justify-center gap-12">
+            <article className="p-5 AddPropertyForm mt-5 w-[40%] ml-5">
+                <form onSubmit={handleSubmit} name="images" className="">
+                <h1 className="text-3xl font-extrabold text-center text-primary-900">Preencha os Dados da Propriedade</h1>
+                {formInput.map((element, idx) => (
+                    <FormInput
+                    handleChange={element.handleChange}
+                    label={element.label}
+                    type={element.type}
+                    value={element.value}
+                    placeholder={element.placeholder}
+                    key={idx}
+                    />
+                ))}
 
-          <div className="my-5">
-            <h2>Selecione as imagens da propriedade</h2>
-            <div className="">
-              <input id="FormInputFile" type="file" onChange={handleFileChange} multiple />
-            </div>
-            {error && (
-              <div style={{ color: "red" }}>
-                <p>{error}</p>
-              </div>
-            )}
-          </div>
+                <div className="my-5">
+                    <h2>Selecione as imagens da propriedade</h2>
+                    <div className="">
+                    <input id="FormInputFile" type="file" onChange={handleFileChange} multiple />
+                    </div>
+                    {error && (
+                    <div style={{ color: "red" }}>
+                        <p>{error}</p>
+                    </div>
+                    )}
+                </div>
 
-          <button type="submit" className="bg-primary-400 text-white rounded-md py-2 px-5 shadow-lg hover:bg-primary-500">Adicionar imóvel</button>
-        </form>
-      </article>
-      <article className="w-full flex flex-col items-center justify-start mt-5 mr-5">
-      <h1 className="text-3xl font-extrabold text-primary-900">Preencha os Dados do Endereço</h1>
-        <CountriesDropdown stateControl={setCountry} />
-        <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
-        <div className="w-full">
-            {addressInputs.map((element, idx) => (
-            <FormInput
-                handleChange={element.handleChange}
-                label={element.label}
-                type={element.type}
-                value={element.value}
-                placeholder={element.placeholder}
-                key={idx}
-            />
-            ))}
+                <button type="submit" className="bg-primary-400 text-white rounded-md py-2 px-5 shadow-lg hover:bg-primary-500">Adicionar imóvel</button>
+                </form>
+            </article>
+            <article className="p-5 AddPropertyForm mt-5 w-[40%] mr-5">
+                <div>
+                <h1 className="text-3xl font-extrabold text-center mb-2 text-primary-900">Preencha os Dados do Endereço</h1>
+                    <CountriesDropdown stateControl={setCountry} />
+                    <CityStateSelect setStateInfo={setState} setCityInfo={setCity} />
+                    <div className="w-full">
+                        {addressInputs.map((element, idx) => (
+                        <FormInput
+                            handleChange={element.handleChange}
+                            label={element.label}
+                            type={element.type}
+                            value={element.value}
+                            placeholder={element.placeholder}
+                            key={idx}
+                        />
+                        ))}
 
-        </div>
-      </article>
+                    </div>
+                </div>
+            </article>
+        </section>
     </section>
   );
 };
