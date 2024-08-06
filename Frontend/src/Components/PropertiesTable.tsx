@@ -1,4 +1,5 @@
 import { Chip } from "@nextui-org/react";
+import { useState } from "react";
 
 interface Data{
     id: string,
@@ -28,10 +29,13 @@ interface Address{
 
 const PropertiesTable = ( props:any ) => {
     const tableHeader = props.tableHeader;
-    const data = props.data;
+    const [data, setData] = useState<Data[]>(props.data);
     const setShowDetails = props.setIsShowingDetails;
     const setPropertyDetailsID = props.setPropertyDetailsID;
+    const numberPerPage:number = 10;
+    const [currentPage, setCurrentPage] = useState<Number>(1);
 
+    
     const handleClick = ( id:string ) => {
         setShowDetails(true);
         setPropertyDetailsID(id);
@@ -65,6 +69,9 @@ const PropertiesTable = ( props:any ) => {
                         </tr>
                     )) }
                 </tbody>
+                <tfoot>
+                    numbering
+                </tfoot>
             </table>
     )
 }

@@ -59,7 +59,7 @@ const AddNewProperty: React.FC = () => {
   const [street, setStreet] = useState<string>('');
   const [number, setNumber] = useState<number>();
   const [error, setError] = useState<string>("");
-
+ 
   const addressInputs: InputParams[] = [
     {
       id: "neighborhood",
