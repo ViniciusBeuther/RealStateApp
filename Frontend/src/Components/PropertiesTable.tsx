@@ -1,5 +1,6 @@
 import { Chip } from "@nextui-org/react";
 import { useState } from "react";
+import Pagination from "./Pagination";
 
 interface Data{
     id: string,
@@ -70,7 +71,7 @@ const PropertiesTable = ( props:any ) => {
                     )) }
                 </tbody>
                 <tfoot>
-                    numbering
+                    <Pagination />
                 </tfoot>
             </table>
     )
