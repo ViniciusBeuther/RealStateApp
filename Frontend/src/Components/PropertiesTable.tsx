@@ -33,8 +33,8 @@ const PropertiesTable = ( props:any ) => {
     const [data, setData] = useState<Data[]>(props.data);
     const setShowDetails = props.setIsShowingDetails;
     const setPropertyDetailsID = props.setPropertyDetailsID;
-    const numberPerPage:number = 10;
-    const [currentPage, setCurrentPage] = useState<Number>(1);
+    const [currentData, setCurrentData] = useState<Data[]>(props.data.slice(0, 10));
+    
 
     
     const handleClick = ( id:string ) => {
@@ -54,7 +54,7 @@ const PropertiesTable = ( props:any ) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { data.map((row:Data, idx: number) => (
+                    { currentData.map((row:Data, idx: number) => (
                         <tr key={idx} 
                             className={`${ idx % 2 == 0 ? 'bg-tableGray-100' : 'bg-tableGray-200' } border-b-white border-b-[2px] hover:cursor-pointer hover:bg-primary-100 hover:border-b-primary-300`}
                             onClick={() => handleClick( row.id )}
@@ -68,11 +68,12 @@ const PropertiesTable = ( props:any ) => {
                                 <Chip color="success" className={`${row.wasSold ? 'bg-red-300' : 'bg-green-300'}`}>{row.wasSold ? 'Vendida' : 'Disponível'}</Chip>
                             </td>
                         </tr>
+                        
                     )) }
                 </tbody>
                 <tfoot>
-                    <Pagination />
-                </tfoot>
+                    <Pagination data={data} setCurrentData={setCurrentData} />
+                </tfoot>                
             </table>
     )
 }
