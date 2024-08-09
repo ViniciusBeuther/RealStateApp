@@ -1,31 +1,5 @@
 import React, { useState } from "react";
 
-interface Data {
-    id: string;
-    number_rooms: number;
-    number_bathrooms: number;
-    all_rooms: string[];
-    square_meters: number;
-    description: string;
-    type: string;
-    image_url: string;
-    price: number;
-    wasSold: boolean;
-    contact: string;
-    address: Address;
-}
-
-interface Address {
-    id: string;
-    property_id: string;
-    country: string;
-    state: string;
-    city: string;
-    neighborhood: string;
-    street: string;
-    number: number;
-}
-
 const renderNumbering = (linesPerPage: number, dataSize: number) => {
     const pages: number[] = [];
     const totalPages = Math.ceil(dataSize / linesPerPage);
@@ -35,25 +9,24 @@ const renderNumbering = (linesPerPage: number, dataSize: number) => {
     return pages;
 };
 
-const Pagination: React.FC<{ data: Data[], setCurrentData:any }> = ({ data, setCurrentData }) => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
+const Pagination: React.FC<{ dataSize: number, setCurrentPage: (page: number) => void }> = ({ dataSize, setCurrentPage }) => {
+    const [currentPage, setLocalCurrentPage] = useState<number>(1);
     const linesPerPage: number = 10;
-    const dataSize = data.length;
     const numbering = renderNumbering(linesPerPage, dataSize);
 
-    
-    const indexOfLastItem = currentPage * linesPerPage;
-    const indexOfFirstItem = indexOfLastItem - linesPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-    
+    const handlePageChange = (page: number) => {
+        setLocalCurrentPage(page);
+        setCurrentPage(page);
+    };
+
     return (
         <div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-5 absolute">
                 {numbering.map((number) => (
                     <button
                         key={number}
-                        onClick={() => setCurrentPage(number)}
-                        className={currentPage === number ? "font-bold" : ""}
+                        onClick={() => handlePageChange(number)}
+                        className={currentPage === number ? "font-bold bg-primary-500 text-white py-2 px-4 rounded-md" : "py-2 px-4"}
                     >
                         {number}
                     </button>
