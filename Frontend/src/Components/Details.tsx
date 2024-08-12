@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SpinnerComponent from "./Spinner";
+import Slider from "react-slick";
 
 interface Data {
   id: string;
@@ -34,6 +35,14 @@ const Details = (props: any) => {
   const [data, setData] = useState<Data | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const carouselSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   useEffect(() => {
     fetch(API_URL + '/' + propertyId)
       .then(response => response.json())
@@ -54,22 +63,32 @@ const Details = (props: any) => {
       <button className="bg-red-300" onClick={() => setIsShowingDetails(false)}>
         Voltar
       </button>
-      <section>
-        <p>{data?.id}</p>
-        <p>{data?.contact}</p>
-        <p>{data?.number_bathrooms}</p>
-        <p>{data?.number_rooms}</p>
-        <p>$ {data?.price.toLocaleString()}</p>
-        <p>{data?.square_meters} m2</p>
-        <p>{data?.type}</p>
-        <p>{data?.wasSold ? 'Vendido' : 'Disponível'}</p>
-        {data?.image_url.map((imageUrl: string, idx: number) => (
-          <img
-            key={idx}
-            src={`http://localhost:3000${imageUrl}`}
-            alt={`image-${idx}`}
-          />
-        ))}
+      <section className="flex w-full">
+        <article>
+          
+          <Slider className="w-[50%] bg-red-500" {...carouselSettings}>
+            {data?.image_url.map((imageUrl: string, idx: number) => (
+              <img 
+                src={`http://localhost:3000${imageUrl}`} 
+                alt={`image-${idx}`} 
+                key={idx}
+                className="w-[250px] h-[250px]"
+                />
+            ))}
+          </Slider>
+
+        </article>
+        
+        <article>
+          <p>{data?.id}</p>
+          <p>{data?.contact}</p>
+          <p>{data?.number_bathrooms}</p>
+          <p>{data?.number_rooms}</p>
+          <p>$ {data?.price.toLocaleString()}</p>
+          <p>{data?.square_meters} m2</p>
+          <p>{data?.type}</p>
+          <p>{data?.wasSold ? 'Vendido' : 'Disponível'}</p>
+        </article>
       </section>
     </div>
   );
