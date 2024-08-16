@@ -62,20 +62,19 @@ const Details = (props: any) => {
   }
 
   return (
-    <div className="bg-yellow-300 w-full">
+    <div className="w-full">
       <button className="bg-red-300" onClick={() => setIsShowingDetails(false)}>
         Voltar
       </button>
-      <section className="p-4 flex items-center justify-start gap-5 bg-green-500">
-
+      <section className="p-4 flex justify-center gap-10">
         <div className="relative max-w-lg overflow-hidden">
-          <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentImage * 100}%)` }}>
+          <div className="flex h-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentImage * 100}%)` }}>
             {data?.image_url.map((imageUrl: string, idx: number) => (
               <div key={idx} className="min-w-full">
                 <img
                   src={`http://localhost:3000${imageUrl}`}
                   alt={`image-${idx}`}
-                  className="w-full h-auto"
+                  className="w-full h-full object-cover"
                   />
               </div>
             ))}
@@ -88,16 +87,22 @@ const Details = (props: any) => {
           →
           </button>
         </div>
-                  <article>
-                    <p><strong>ID:</strong> {data?.id}</p>
-                    <p><strong>Contato:</strong> {data?.contact}</p>
-                    <p><strong>Banheiros:</strong> {data?.number_bathrooms}</p>
-                    <p><strong>Quartos:</strong> {data?.number_rooms}</p>
-                    <p><strong>Preço:</strong> $ {data?.price.toLocaleString()}</p>
-                    <p><strong>Metragem:</strong> {data?.square_meters} m2</p>
-                    <p><strong>Tipo:</strong> {data?.type}</p>
-                    <p><strong>Status:</strong> {data?.wasSold ? 'Vendido' : 'Disponível'}</p>
-                  </article>
+        <div className="bg-white rounded-md p-5">
+            <article>
+              <h1 className="text-lg font-bold">Descrição</h1>
+              <p>{data?.description}</p>
+            </article>
+            <article className="bg-pink-400">
+              <p><strong>ID:</strong> {data?.id}</p>
+              <p><strong>Contato:</strong> {data?.contact}</p>
+              <p><strong>Banheiros:</strong> {data?.number_bathrooms}</p>
+              <p><strong>Quartos:</strong> {data?.number_rooms}</p>
+              <p><strong>Preço:</strong> $ {data?.price.toLocaleString()}</p>
+              <p><strong>Metragem:</strong> {data?.square_meters} m2</p>
+              <p><strong>Tipo:</strong> {data?.type}</p>
+              <p><strong>Status:</strong> {data?.wasSold ? 'Vendido' : 'Disponível'}</p>
+            </article>
+        </div>
       </section>
     </div>
   );
