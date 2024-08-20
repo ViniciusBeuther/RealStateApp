@@ -84,7 +84,7 @@ const Details = (props: any) => {
             ←
           </button>
           <button onClick={handleNext} className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-primary-500 bg-opacity-50 text-white px-3 py-2 rounded-l-lg">
-          →
+          → 
           </button>
         </div>
         <div className="bg-white rounded-md p-5">
