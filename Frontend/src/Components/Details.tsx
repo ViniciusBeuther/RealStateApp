@@ -66,7 +66,7 @@ const Details = (props: any) => {
       <button className="bg-red-300" onClick={() => setIsShowingDetails(false)}>
         Voltar
       </button>
-      <section className="p-4 flex justify-center gap-10">
+      <section className="p-4 flex justify-center gap-8">
         <div className="relative max-w-lg overflow-hidden">
           <div className="flex h-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentImage * 100}%)` }}>
             {data?.image_url.map((imageUrl: string, idx: number) => (
