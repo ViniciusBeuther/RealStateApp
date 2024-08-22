@@ -64,7 +64,7 @@ const Details = (props: any) => {
   return (
     <div className="w-full">
       <button className="bg-red-300" onClick={() => setIsShowingDetails(false)}>
-        Voltar
+        Voltar para página anterior
       </button>
       <section className="p-4 flex justify-center gap-8">
         <div className="relative max-w-lg overflow-hidden">
